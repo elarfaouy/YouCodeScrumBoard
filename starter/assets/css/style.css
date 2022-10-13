@@ -1,3 +1,10 @@
+:root{
+    --green: #00acac;
+    --green-dark: #007474;
+    --black: #20252a;
+    --blue: #348fe2;
+}
+
 .pace {
     display: none;
 }
@@ -7,4 +14,26 @@
     background: url(../img/cover/cover-scrum-board.png) no-repeat fixed;
     background-size: 360px;
     background-position: right bottom;
+}
+
+body{
+    background-color: #dee2e6 !important;
+}
+
+.fa-plus{
+    color: var(--green-dark);
+}
+
+button.border-0.bg-white{
+    margin-bottom: 1px;
+    text-align: start;
+}
+
+button.border-0.bg-white .text-black-50, button.border-0.bg-white .text-black-50 + div{
+    font-size: 0.65rem;
+}
+
+span.bg-primary.rounded.text-white, span.bg-light.rounded{
+    padding: 2px 7px;
+    font-size: .6rem;
 }
