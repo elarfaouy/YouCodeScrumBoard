@@ -24,11 +24,6 @@ body{
     color: var(--green-dark);
 }
 
-button.border-0.bg-white{
-    margin-bottom: 1px;
-    text-align: start;
-}
-
 button.border-0.bg-white .text-black-50, button.border-0.bg-white .text-black-50 + div{
     font-size: 0.65rem;
 }
