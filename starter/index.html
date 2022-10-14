@@ -34,12 +34,12 @@
 				</div>
 				
 				<div class="d-flex align-items-center">
-					<button class="btn btn-success rounded-pill"><i class="fa-solid fa-plus pe-1"></i> Add Task</a>
+					<button type="button" class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#modal-task"><i class="fa-solid fa-plus pe-1"></i> Add Task</button>
 				</div>
 			</div>
 			
 			<div class="row">
-				<div class="col-lg-4  col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 					<div class="">
 						<div class="">
 							<h4 class="bg-black px-3 py-2 rounded-top fs-6 text-white mb-0">To do (<span id="to-do-tasks-count">5</span>)</h4>
@@ -133,7 +133,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 					<div class="">
 						<div class="">
 							<h4 class="bg-black px-3 py-2 rounded-top fs-6 text-white mb-0">In Progress (<span id="in-progress-tasks-count">4</span>)</h4>
@@ -208,7 +208,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12">
 					<div class="">
 						<div class="">
 							<h4 class="bg-black px-3 py-2 rounded-top fs-6 text-white mb-0">Done (<span id="done-tasks-count">4</span>)</h4>
@@ -295,12 +295,71 @@
 	<!-- END #app -->
 	
 	<!-- TASK MODAL -->
-	<div class="modal fade" id="modal-task">
-		<!-- Modal content goes here -->
+	<div class="modal fade " id="modal-task" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add Task</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="recipient-name" class="col-form-label">Title</label>
+						<input type="text" class="form-control" id="recipient-name">
+					</div>
+					<div class="mb-3">
+						<label for="" class="col-form-label">Type</label>
+						<div class="form-check ms-3">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+							<label class="form-check-label" for="flexRadioDefault1">
+							Feature
+							</label>
+						</div>
+						<div class="form-check ms-3">
+							<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+							<label class="form-check-label" for="flexRadioDefault2">
+								Bug
+							</label>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="Priority" class="col-form-label">Priority</label>
+						<select class="form-select" aria-label="Default select example" id="Priority">
+							<option selected>Please select</option>
+							<option value="1">One</option>
+							<option value="2">Two</option>
+							<option value="3">Three</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="Status" class="col-form-label">Status</label>
+						<select class="form-select" aria-label="Default select example" id="Status">
+							<option selected>Please select</option>
+							<option value="1">One</option>
+							<option value="2">Two</option>
+							<option value="3">Three</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="Date" class="col-form-label">Date</label>
+						<input type="date" class="form-control" id="Date">
+					</div>
+					<div class="mb-3">
+						<label for="message-text" class="col-form-label">Description</label>
+						<textarea class="form-control" id="message-text"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light text-black border" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary">Save</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- ================== BEGIN core-js ================== -->
 	<script src="assets/js/vendor.min.js"></script>
+	<script src="assets/js/app.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
 	<!-- ================== END core-js ================== -->
 </body>
