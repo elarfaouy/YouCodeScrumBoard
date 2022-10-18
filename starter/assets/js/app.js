@@ -7,15 +7,18 @@ let inProgressTasks = document.getElementById("in-progress-tasks");
 let doneTasks = document.getElementById("done-tasks");
 
 readTasks();
-saveTask();
+createTask();
 
 function readTasks(){
     let count = 0;
+    let countTodo = 0, countInProgress = 0, countDone = 0;
+
     tasks.forEach(element => {
         count++;
         if(element['status'] == 'To Do'){
+            countTodo++;
             todoTasks.innerHTML += `
-                <button class="border-0 bg-white py-3 d-flex text-start mb-1px rounded-bottom">
+                <button class="border-0 bg-white py-3 d-flex text-start mb-1px">
                     <div class="px-3 py-1">
                         <i class="fa-regular fa-circle-question text-success fa-lg"></i>
                     </div>
@@ -32,10 +35,11 @@ function readTasks(){
                     </div>
                 </button>`;
         }else if(element['status'] == 'In Progress'){
+            countInProgress++;
             inProgressTasks.innerHTML += `
-                <button class="border-0 bg-white py-3 d-flex text-start mb-1px rounded-bottom">
+                <button class="border-0 bg-white py-3 d-flex text-start mb-1px">
                     <div class="px-3 py-1">
-                        <i class="fa-regular fa-circle-question text-success fa-lg"></i>
+                        <i class="fa fa-circle-notch text-success fa-lg" aria-hidden="true"></i>
                     </div>
                     <div class="">
                         <div class="fw-bold">${element['title']}</div>
@@ -50,10 +54,11 @@ function readTasks(){
                     </div>
                 </button>`;
         }else if(element['status'] == 'Done'){
+            countDone++;
             doneTasks.innerHTML += `
-                <button class="border-0 bg-white py-3 d-flex text-start mb-1px rounded-bottom">
+                <button class="border-0 bg-white py-3 d-flex text-start mb-1px">
                     <div class="px-3 py-1">
-                        <i class="fa-regular fa-circle-question text-success fa-lg"></i>
+                        <i class="far fa-check-circle text-success fa-lg"></i>
                     </div>
                     <div class="">
                         <div class="fw-bold">${element['title']}</div>
@@ -69,6 +74,26 @@ function readTasks(){
                 </button>`;
         }
     });
+
+    let countTodoTasks = document.getElementById("to-do-tasks-count");
+    let countInProgressTasks = document.getElementById("in-progress-tasks-count");
+    let countDoneTasks = document.getElementById("done-tasks-count");
+
+    countTodoTasks.innerText = countTodo;
+    countInProgressTasks.innerText = countInProgress;
+    countDoneTasks.innerText = countDone;
+}
+
+function removeTasks(){
+    todoTasks.innerHTML = "";
+    inProgressTasks.innerHTML = "";
+    doneTasks.innerHTML = "";
+}
+
+function clearFields(){
+    taskTitle.value = "";
+    taskDate.value = "";
+    taskDescription.value = "";
 }
 
 function createTask() {
@@ -77,65 +102,49 @@ function createTask() {
     // Afficher le boutton save
 
     // Ouvrir modal form
-
+    saveTask();
 }
 
 function saveTask() {
     let buttonSave = document.getElementById("buttonSave");
+    let buttonCancel = document.getElementById("buttonCancel");
+    let textRequired = document.getElementById("textRequired");
 
     // Recuperer task attributes a partir les champs input
     let taskTitle = document.querySelector("#taskTitle");
-    let taskType = document.getElementById("feature");
+    let Type = document.getElementById("feature");
     let taskPriority = document.getElementById("taskPriority");
     let taskStatus = document.getElementById("taskStatus");
     let taskDate = document.getElementById("taskDate");
     let taskDescription = document.getElementById("taskDescription");
-
+    
     buttonSave.addEventListener("click", (e)=>{
-        e.preventDefault();
-        console.log(taskTitle.childNodes);
-        console.log(taskType.childNodes);
-        console.log(taskPriority);
-        console.log(taskStatus);
-        console.log(taskDate);
-        console.log(taskDescription);
-        if(taskTitle.value !== "" && taskDate.value !== ""){
-            todoTasks.innerHTML += `
-            <button class="border-0 bg-white py-3 d-flex text-start mb-1px rounded-bottom">
-                <div class="px-3 py-1">
-                    <i class="fa-regular fa-circle-question text-success fa-lg"></i>
-                </div>
-                <div class="">
-                    <div class="fw-bold">Use charts and diagrams</div>
-                    <div class="">
-                        <div class="text-black-50">#5 created in 2022-10-08</div>
-                        <div class="" title="While it is not always necessary, sometimes it might be beneficial to prepare a flowchart, a block diagram or some other kind of concept visualization that will render it easy for the developer to comprehend the task and its scope.">While it is not always necessary, sometimes it might be...</div>
-                    </div>
-                    <div class="">
-                        <span class="bg-primary rounded text-white">High</span>
-                        <span class="bg-light rounded">Feature</span>
-                    </div>
-                </div>
-            </button>`;
+        let taskType = (Type.checked === true) ? "Feature" : "Bug";
+        if(taskTitle.value != "" && taskDate.value != "" && taskDescription.value != ""){
+            textRequired.innerHTML = "";
+
+            // Créez task object
+            let task = {
+                'title'         :   taskTitle.value,
+                'type'          :   taskType,
+                'priority'      :   taskPriority.value,
+                'status'        :   taskStatus.value,
+                'date'          :   taskDate.value,
+                'description'   :   taskDescription.value,
+            };
+        
+            // Ajoutez object au Array
+            tasks.push(task);
+        
+            // refresh tasks
+            clearFields();
+            removeTasks();
+            readTasks();
+            buttonCancel.click();
+        }else{
+            textRequired.innerHTML = `<p>All the fields are required !</p>`;
         }
     });
-
-    // Créez task object
-    // let task = {
-    //     'title'         :   taskTitle,
-    //     'type'          :   taskType,
-    //     'priority'      :   taskPriority,
-    //     'status'        :   taskStatus,
-    //     'date'          :   taskDate,
-    //     'description'   :   taskDescription,
-    // };
-
-    // Ajoutez object au Array
-    // tasks.push(task);
-
-    // refresh tasks
-    // readTasks();
-    
 }
 
 function editTask(index) {

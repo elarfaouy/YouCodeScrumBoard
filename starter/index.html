@@ -91,7 +91,9 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<form action="" method="">
-					<div id="tessst" class="modal-body">
+					<div class="modal-body">
+						<div id="textRequired" class="text-center text-danger">
+						</div>
 						<div class="mb-3">
 							<label for="taskTitle" class="col-form-label">Title</label>
 							<input type="text" class="form-control" id="taskTitle" required>
@@ -123,8 +125,8 @@
 						<div class="mb-3">
 							<label for="taskStatus" class="col-form-label">Status</label>
 							<select class="form-select" aria-label="Default select example" id="taskStatus">
-								<option value="Todo">To Do</option>
-								<option value="Progress">In Progress</option>
+								<option value="To Do">To Do</option>
+								<option value="In Progress">In Progress</option>
 								<option value="Done">Done</option>
 							</select>
 						</div>
@@ -138,7 +140,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-light text-black border" data-bs-dismiss="modal">Cancel</button>
+						<button id="buttonCancel" type="button" class="btn btn-light text-black border" data-bs-dismiss="modal">Cancel</button>
 						<button id="buttonSave" type="button" class="btn btn-primary">Save</button>
 					</div>
 				</form>
