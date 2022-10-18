@@ -32,3 +32,18 @@ span.bg-primary.rounded.text-white, span.bg-light.rounded{
     padding: 2px 7px;
     font-size: .6rem;
 }
+
+#deleteTask{
+    position: absolute;
+    visibility: hidden;
+    top: -5px;
+    right: 5px;
+    font-size: 20px;
+}
+#deleteTask:hover{
+    color: red;
+}
+
+#task:hover > #deleteTask{
+    visibility: visible;
+}
