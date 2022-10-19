@@ -2,12 +2,21 @@
  * In this file app.js you will find all CRUD functions name.
  * 
  */
+ let indexFromEdit = -1;
+
 let todoTasks = document.getElementById("to-do-tasks");
 let inProgressTasks = document.getElementById("in-progress-tasks");
 let doneTasks = document.getElementById("done-tasks");
 
+let taskTitle = document.querySelector("#taskTitle");
+let Type = document.getElementById("Feature");
+let taskPriority = document.getElementById("taskPriority");
+let taskStatus = document.getElementById("taskStatus");
+let taskDate = document.getElementById("taskDate");
+let taskDescription = document.getElementById("taskDescription");
+
+
 readTasks();
-createTask();
 
 function readTasks(){
     let count = 0;
@@ -17,11 +26,11 @@ function readTasks(){
         if(element['status'] == 'To Do'){
             countTodo++;
             todoTasks.innerHTML += `
-                <button data-id="${count}" id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative">
+                <button data-status="${element['status']}" data-id="${count}" id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative">
                     <div class="px-3 py-1">
                         <i class="fa-regular fa-circle-question text-success fa-lg"></i>
                     </div>
-                    <div class="" onclick="updateTask()">
+                    <div class="" onclick="editTask(this)" data-bs-toggle="modal" data-bs-target="#modal-task">
                         <div class="fw-bold">${element['title']}</div>
                         <div class="">
                             <div class="text-black-50">#${count+1} created in ${element['date']}</div>
@@ -39,11 +48,11 @@ function readTasks(){
         }else if(element['status'] == 'In Progress'){
             countInProgress++;
             inProgressTasks.innerHTML += `
-                <button data-id="${count}" id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative">
+                <button data-status="${element['status']}" data-id="${count}" id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative" >
                     <div class="px-3 py-1">
                         <i class="fa fa-circle-notch text-success fa-lg" aria-hidden="true"></i>
                     </div>
-                    <div class="" onclick="updateTask()">
+                    <div class="" onclick="editTask(this)" data-bs-toggle="modal" data-bs-target="#modal-task">
                         <div class="fw-bold">${element['title']}</div>
                         <div class="">
                             <div class="text-black-50">#${count+1} created in ${element['date']}</div>
@@ -61,11 +70,11 @@ function readTasks(){
         }else if(element['status'] == 'Done'){
             countDone++;
             doneTasks.innerHTML += `
-                <button data-id="${count}" id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative">
+                <button data-status="${element['status']}" data-id="${count}" id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative" >
                     <div class="px-3 py-1">
                         <i class="far fa-check-circle text-success fa-lg"></i>
                     </div>
-                    <div class="" onclick="updateTask()">
+                    <div class="" onclick="editTask(this)" data-bs-toggle="modal" data-bs-target="#modal-task">
                         <div class="fw-bold">${element['title']}</div>
                         <div class="">
                             <div class="text-black-50">#${count+1} created in ${element['date']}</div>
@@ -91,15 +100,22 @@ function readTasks(){
     countTodoTasks.innerText = countTodo;
     countInProgressTasks.innerText = countInProgress;
     countDoneTasks.innerText = countDone;
+
+    createTask();
 }
 
 function createTask() {
     // initialiser task form
+    let buttonAddTask = document.getElementById("buttonAddTask");
 
+    buttonAddTask.addEventListener("click", ()=>{
+        indexFromEdit = -1;
+        initTaskForm();
+        saveTask();
+    });
     // Afficher le boutton save
 
     // Ouvrir modal form
-    saveTask();
 }
 
 function saveTask() {
@@ -108,12 +124,6 @@ function saveTask() {
     let textRequired = document.getElementById("textRequired");
 
     // Recuperer task attributes a partir les champs input
-    let taskTitle = document.querySelector("#taskTitle");
-    let Type = document.getElementById("feature");
-    let taskPriority = document.getElementById("taskPriority");
-    let taskStatus = document.getElementById("taskStatus");
-    let taskDate = document.getElementById("taskDate");
-    let taskDescription = document.getElementById("taskDescription");
     
     buttonSave.addEventListener("click", (e)=>{
         let taskType = (Type.checked === true) ? "Feature" : "Bug";
@@ -131,10 +141,12 @@ function saveTask() {
             };
         
             // Ajoutez object au Array
+            if(indexFromEdit != -1){
+                tasks.splice(indexFromEdit, 1);
+            }
             tasks.push(task);
         
             // refresh tasks
-            initTaskForm();
             reloadTasks();
             buttonCancel.click();
         }else{
@@ -143,7 +155,9 @@ function saveTask() {
     });
 }
 
-function editTask(index) {
+function editTask(e) {
+    // console.log(e.parentElement.getAttribute("data-id"));
+    indexFromEdit = e.parentElement.getAttribute("data-id");
     // Initialisez task form
 
     // Affichez updates
@@ -152,13 +166,29 @@ function editTask(index) {
 
     // Définir l’index en entrée cachée pour l’utiliser en Update et Delete
 
-    // Definir FORM INPUTS
+    // Definir FORM 
+    let typeFeature = document.getElementById("Feature");
+    let typeBug = document.getElementById("Bug");
+    if(e.children[2].children[1].textContent == "Feature"){
+        typeFeature.checked = true;
+        typeBug.checked = false;
+    }else{
+        typeFeature.checked = false;
+        typeBug.checked = true;
+    }
 
+    taskTitle.value = e.children[0].textContent;
+    taskPriority.value = e.children[2].children[0].textContent;
+    taskStatus.value = e.parentElement.getAttribute("data-status");
+    taskDate.value = e.children[1].children[0].textContent.slice(-10);
+    taskDescription.value = e.children[1].children[1].textContent;
     // Ouvrir Modal form
+
+    saveTask();
 }
 
 function updateTask() {
-    console.log("button");
+    
     // GET TASK ATTRIBUTES FROM INPUTS
 
     // Créez task object
