@@ -34,12 +34,12 @@
 				</div>
 				
 				<div class="d-flex align-items-center">
-					<button id="buttonAddTask" type="button" class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#modal-task"><i class="fa-solid fa-plus pe-1"></i> Add Task</button>
+					<button id="buttonAddTask" type="button" class="btn btn-success rounded-pill"><i class="fa-solid fa-plus pe-1"></i> Add Task</button>
 				</div>
 			</div>
 			
 			<div class="row">
-				<div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-3" ondrop="dropTodo(event)" ondragover="allowDrop(event)">
 					<div class="">
 						<div class="">
 							<h4 class="bg-black px-3 py-2 rounded-top fs-6 text-white mb-0">To do (<span id="to-do-tasks-count">0</span>)</h4>
@@ -68,7 +68,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-3" ondrop="dropInProgress(event)" ondragover="allowDrop(event)">
 					<div class="">
 						<div class="">
 							<h4 class="bg-black px-3 py-2 rounded-top fs-6 text-white mb-0">In Progress (<span id="in-progress-tasks-count">0</span>)</h4>
@@ -79,7 +79,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12" ondrop="dropDone(event)" ondragover="allowDrop(event)">
 					<div class="">
 						<div class="">
 							<h4 class="bg-black px-3 py-2 rounded-top fs-6 text-white mb-0">Done (<span id="done-tasks-count">0</span>)</h4>

@@ -7,17 +7,17 @@
 let indexFromEdit = -1;
 
 // this variables for select the div contains the tasks
-let todoTasks = document.getElementById("to-do-tasks");
-let inProgressTasks = document.getElementById("in-progress-tasks");
-let doneTasks = document.getElementById("done-tasks");
+let todoTasks = document.querySelector("#to-do-tasks");
+let inProgressTasks = document.querySelector("#in-progress-tasks");
+let doneTasks = document.querySelector("#done-tasks");
 
 // this variables for select inputs form
 let taskTitle = document.querySelector("#taskTitle");
-let Type = document.getElementById("Feature");
-let taskPriority = document.getElementById("taskPriority");
-let taskStatus = document.getElementById("taskStatus");
-let taskDate = document.getElementById("taskDate");
-let taskDescription = document.getElementById("taskDescription");
+let Type = document.querySelector("#Feature");
+let taskPriority = document.querySelector("#taskPriority");
+let taskStatus = document.querySelector("#taskStatus");
+let taskDate = document.querySelector("#taskDate");
+let taskDescription = document.querySelector("#taskDescription");
 
 
 readTasks();
@@ -26,6 +26,8 @@ function createButton(index, task){
     let button = document.createElement("button");
     button.className = "border-0 bg-white py-3 d-flex w-100 text-start mb-1px position-relative";
     button.id = "task";
+    button.setAttribute("draggable", "true");
+    button.setAttribute("ondragstart", `drag(event, ${index})`);
 
     let iconDiv = document.createElement("div");
     iconDiv.className = "px-3 py-1";
@@ -72,6 +74,8 @@ function createButton(index, task){
 }
 
 function readTasks(){
+    syncToLacalStorage();
+
     let count = 0;
     let countTodo = 0, countInProgress = 0, countDone = 0;
 
@@ -89,15 +93,15 @@ function readTasks(){
         count++;
     });
 
-    document.getElementById("to-do-tasks-count").textContent = countTodo;
-    document.getElementById("in-progress-tasks-count").textContent = countInProgress;
-    document.getElementById("done-tasks-count").textContent = countDone;
+    document.querySelector("#to-do-tasks-count").textContent = countTodo;
+    document.querySelector("#in-progress-tasks-count").textContent = countInProgress;
+    document.querySelector("#done-tasks-count").textContent = countDone;
 
     createTask();
 }
 
 function createTask() {
-    let buttonAddTask = document.getElementById("buttonAddTask");
+    let buttonAddTask = document.querySelector("#buttonAddTask");
 
     buttonAddTask.onclick = ()=>{
         indexFromEdit = -1;
@@ -113,9 +117,8 @@ function createTask() {
 }
 
 function saveTask() {
-    let buttonSave = document.getElementById("buttonSave");
-    let buttonCancel = document.getElementById("buttonCancel");
-    let textRequired = document.getElementById("textRequired");
+    let buttonSave = document.querySelector("#buttonSave");
+    let textRequired = document.querySelector("#textRequired");
 
     // Recuperer task attributes a partir les champs input
     buttonSave.onclick = ()=>{
@@ -139,10 +142,14 @@ function saveTask() {
                 tasks.splice(indexFromEdit, 1);
             }
             tasks.push(task);
+
+            localStorage.setItem("tasks1", JSON.stringify(tasks));
         
             // refresh tasks
             reloadTasks();
-            buttonCancel.click();
+
+            // Close modal form
+            $("#modal-task").modal("hide");
         }else{
             textRequired.innerHTML = `<p>All the fields are required !</p>`;
         }
@@ -154,8 +161,8 @@ function editTask(id) {
     indexFromEdit = id;
 
     // Initialisez task form
-    let typeFeature = document.getElementById("Feature");
-    let typeBug = document.getElementById("Bug");
+    let typeFeature = document.querySelector("#Feature");
+    let typeBug = document.querySelector("#Bug");
     if(tasks[id].type == "Feature"){
         typeFeature.checked = true;
     }else{
@@ -178,6 +185,8 @@ function editTask(id) {
 function deleteTask(id) {
     // Remove task from array by index splice function
     tasks.splice(id, 1);
+
+    localStorage.setItem("tasks1", JSON.stringify(tasks));
     
     // refresh tasks
     reloadTasks();
@@ -185,7 +194,7 @@ function deleteTask(id) {
 
 function initTaskForm() {
     // Clear task form from data
-    document.getElementById("test").reset();
+    document.querySelector("#form").reset();
 }
 
 function reloadTasks() {
@@ -196,32 +205,39 @@ function reloadTasks() {
     readTasks();
 }
 
-/* function updateTask() {
-    
-    // GET TASK ATTRIBUTES FROM INPUTS
+function syncToLacalStorage(){
+    tasks = JSON.parse(localStorage.getItem("tasks1"));
+    localStorage.setItem("tasks1", JSON.stringify(tasks));
+}
 
-    // Créez task object
+function drag(ev, index) {
+    ev.dataTransfer.setData("index", index);
+}
 
-    // Remplacer ancienne task par nouvelle task
+function allowDrop(ev) {
+    ev.preventDefault();
+}
 
-    // Fermer Modal form
+function dropTodo(ev) {
+    ev.preventDefault();
+    let index = ev.dataTransfer.getData("index");
+    tasks[index].status = "To Do";
+    localStorage.setItem("tasks1", JSON.stringify(tasks));
+    reloadTasks();
+}
 
-    // Refresh tasks
-    
-} */
+function dropInProgress(ev) {
+    ev.preventDefault();
+    let index = ev.dataTransfer.getData("index");
+    tasks[index].status = "In Progress";
+    localStorage.setItem("tasks1", JSON.stringify(tasks));
+    reloadTasks();
+}
 
-// `<button id="task" class="border-0 bg-white py-3 d-flex w-100 text-start mb-1px position-relative">
-//     <div class="px-3 py-1">
-//         <i class="fa-regular fa-circle-question text-success fa-lg"></i>
-//     </div>
-//     <div class="w-75" onclick="editTask(${count})">
-//         <div class="fw-bold text-truncate">${element['title']}</div>
-//         <div class="text-black-50">#${count+1} created in ${element['date']}</div>
-//         <div class="text-truncate" title="">${element['description']}</div>
-//         <span class="bg-primary rounded text-white">${element['priority']}</span>
-//         <span class="bg-light rounded">${element['type']}</span>
-//     </div>
-//     <div onclick="deleteTask(${count})" id="deleteTask">
-//         <span>&times;</span>
-//     </div>
-// </button>`
+function dropDone(ev) {
+    ev.preventDefault();
+    let index = ev.dataTransfer.getData("index");
+    tasks[index].status = "Done";
+    localStorage.setItem("tasks1", JSON.stringify(tasks));
+    reloadTasks();
+}

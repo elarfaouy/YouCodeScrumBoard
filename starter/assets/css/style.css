@@ -33,6 +33,10 @@ span.bg-primary.rounded.text-white, span.bg-light.rounded{
     font-size: .6rem;
 }
 
+#buttonAddTask:hover{
+    background-color: var(--green);
+}
+
 #deleteTask{
     position: absolute;
     visibility: hidden;
