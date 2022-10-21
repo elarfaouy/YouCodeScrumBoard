@@ -22,6 +22,55 @@ let taskDescription = document.getElementById("taskDescription");
 
 readTasks();
 
+function createButton(index, task){
+    let button = document.createElement("button");
+    button.className = "border-0 bg-white py-3 d-flex w-100 text-start mb-1px position-relative";
+    button.id = "task";
+
+    let iconDiv = document.createElement("div");
+    iconDiv.className = "px-3 py-1";
+        let icon = document.createElement("i");
+        if(task.status == "To Do"){
+            icon.className = "fa-regular fa-circle-question text-success fa-lg";
+        }else if(task.status == "In Progress"){
+            icon.className = "fa fa-circle-notch text-success fa-lg";
+        }else if(task.status == "Done"){
+            icon.className = "far fa-check-circle text-success fa-lg";
+        }
+        iconDiv.append(icon);
+
+    let contentDiv = document.createElement("div");
+    contentDiv.className = "w-75";
+    contentDiv.setAttribute("onclick", `editTask(${index})`);
+        let titleTask = document.createElement("div");
+        titleTask.className = "fw-bold text-truncate";
+        titleTask.append(task.title);
+        let dateTask = document.createElement("div");
+        dateTask.className = "text-black-50";
+        dateTask.append(`#${index+1} created in ${task.date}`);
+        let descriptionTask = document.createElement("div");
+        descriptionTask.className = "text-truncate";
+        descriptionTask.append(task.description);
+        let priorityTask = document.createElement("span");
+        priorityTask.className = "bg-primary rounded text-white";
+        priorityTask.append(task.priority);
+        let typeTask = document.createElement("span");
+        typeTask.className = "bg-light rounded";
+        typeTask.append(task.type);
+        contentDiv.append(titleTask, dateTask, descriptionTask, priorityTask, typeTask);
+
+    let deleteDiv = document.createElement("div");
+    deleteDiv.id = "deleteTask";
+    deleteDiv.setAttribute("onclick", `deleteTask(${index})`);
+        let deleteIcon = document.createElement("span");
+        deleteIcon.innerHTML = "&times;";
+        deleteDiv.append(deleteIcon);
+
+
+    button.append(iconDiv, contentDiv, deleteDiv);
+    return button;
+}
+
 function readTasks(){
     let count = 0;
     let countTodo = 0, countInProgress = 0, countDone = 0;
@@ -29,77 +78,20 @@ function readTasks(){
     tasks.forEach(element => {
         if(element['status'] == 'To Do'){
             countTodo++;
-            todoTasks.innerHTML += `
-                <button id="task" class="border-0 bg-white py-3 d-flex w-100 text-start mb-1px position-relative">
-                    <div class="px-3 py-1">
-                        <i class="fa-regular fa-circle-question text-success fa-lg"></i>
-                    </div>
-                    <div class="w-75" onclick="editTask(${count})">
-                        <div class="fw-bold text-truncate">${element['title']}</div>
-                        <div class="">
-                            <div class="text-black-50">#${count+1} created in ${element['date']}</div>
-                            <div class="text-truncate" title="">${element['description']}</div>
-                        </div>
-                        <div class="">
-                            <span class="bg-primary rounded text-white">${element['priority']}</span>
-                            <span class="bg-light rounded">${element['type']}</span>
-                        </div>
-                    </div>
-                    <div onclick="deleteTask(${count})" id="deleteTask">
-                        <span>&times;</span>
-                    </div>
-                </button>`;
+            todoTasks.append(createButton(count, element));
         }else if(element['status'] == 'In Progress'){
             countInProgress++;
-            inProgressTasks.innerHTML += `
-                <button id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative" >
-                    <div class="px-3 py-1">
-                        <i class="fa fa-circle-notch text-success fa-lg" aria-hidden="true"></i>
-                    </div>
-                    <div class="w-75" onclick="editTask(${count})">
-                        <div class="fw-bold text-truncate">${element['title']}</div>
-                        <div class="">
-                            <div class="text-black-50">#${count+1} created in ${element['date']}</div>
-                            <div class="text-truncate" title="">${element['description']}</div>
-                        </div>
-                        <div class="">
-                            <span class="bg-primary rounded text-white">${element['priority']}</span>
-                            <span class="bg-light rounded">${element['type']}</span>
-                        </div>
-                    </div>
-                    <div onclick="deleteTask(${count})" id="deleteTask">
-                        <span>&times;</span>
-                    </div>
-                </button>`;
+            inProgressTasks.append(createButton(count, element));
         }else if(element['status'] == 'Done'){
             countDone++;
-            doneTasks.innerHTML += `
-                <button id="task" class="border-0 bg-white py-3 d-flex text-start mb-1px position-relative" >
-                    <div class="px-3 py-1">
-                        <i class="far fa-check-circle text-success fa-lg"></i>
-                    </div>
-                    <div class="w-75" onclick="editTask(${count})">
-                        <div class="fw-bold text-truncate">${element['title']}</div>
-                        <div class="">
-                            <div class="text-black-50">#${count+1} created in ${element['date']}</div>
-                            <div class="text-truncate" title="">${element['description']}</div>
-                        </div>
-                        <div class="">
-                            <span class="bg-primary rounded text-white">${element['priority']}</span>
-                            <span class="bg-light rounded">${element['type']}</span>
-                        </div>
-                    </div>
-                    <div onclick="deleteTask(${count})" id="deleteTask">
-                        <span>&times;</span>
-                    </div>
-                </button>`;
+            doneTasks.append(createButton(count, element));
         }
         count++;
     });
 
-    document.getElementById("to-do-tasks-count").innerText = countTodo;
-    document.getElementById("in-progress-tasks-count").innerText = countInProgress;
-    document.getElementById("done-tasks-count").innerText = countDone;
+    document.getElementById("to-do-tasks-count").textContent = countTodo;
+    document.getElementById("in-progress-tasks-count").textContent = countInProgress;
+    document.getElementById("done-tasks-count").textContent = countDone;
 
     createTask();
 }
@@ -217,3 +209,19 @@ function reloadTasks() {
     // Refresh tasks
     
 } */
+
+// `<button id="task" class="border-0 bg-white py-3 d-flex w-100 text-start mb-1px position-relative">
+//     <div class="px-3 py-1">
+//         <i class="fa-regular fa-circle-question text-success fa-lg"></i>
+//     </div>
+//     <div class="w-75" onclick="editTask(${count})">
+//         <div class="fw-bold text-truncate">${element['title']}</div>
+//         <div class="text-black-50">#${count+1} created in ${element['date']}</div>
+//         <div class="text-truncate" title="">${element['description']}</div>
+//         <span class="bg-primary rounded text-white">${element['priority']}</span>
+//         <span class="bg-light rounded">${element['type']}</span>
+//     </div>
+//     <div onclick="deleteTask(${count})" id="deleteTask">
+//         <span>&times;</span>
+//     </div>
+// </button>`
