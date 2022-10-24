@@ -2,6 +2,7 @@
  * In this file app.js you will find all CRUD functions name.
  * 
  */
+localStorage.setItem("tasks1", JSON.stringify(tasks));
 
 // this variable for check if create task from buttonAddTask or from editTask
 let indexFromEdit = -1;
@@ -119,6 +120,7 @@ function createTask() {
 function saveTask() {
     let buttonSave = document.querySelector("#buttonSave");
     let textRequired = document.querySelector("#textRequired");
+    textRequired.innerHTML = "";
 
     // Recuperer task attributes a partir les champs input
     buttonSave.onclick = ()=>{
