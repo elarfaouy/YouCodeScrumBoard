@@ -34,7 +34,7 @@ Les designs ont été créés dans les largeurs (widths) suivantes:
 Voir les maquettes en format PNG dans 📁 `/design`.
 
 ## Preview
-
+ 
 ### Desktop preview
 
 ![desktop](./design/desktop.png)
